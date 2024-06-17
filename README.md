@@ -1,8 +1,8 @@
-# Elasticsearch::Tests
+# Elasticsearch Tests Runner
 
-TODO: Delete this and the text below, and describe your gem
+This gem is a runner for Elasticsearch clients to run the [Elasticsearch Clients Tests](https://github.com/elastic/elasticsearch-clients-tests). It's a test suite in the YAML format to reuse across different Elasticsearch clients in different programming languages.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/elasticsearch/tests`. To experiment with that code, run `bin/console` for an interactive prompt.
+
 
 ## Installation
 
@@ -10,15 +10,38 @@ TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_O
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add elasticsearch-test-runner
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install elasticsearch-test-runner
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem is being used in the [elasticsearch](https://github.com/elastic/elasticsearch-ruby) and [elasticsearch-serverless](https://github.com/elastic/elasticsearch-serverless-ruby/) Ruby clients.
+
+To start using it, add this to your code:
+
+```ruby
+# Require the library
+require 'elasticsearch/tests/test_runner'
+# Define a path where the test files are being stored:
+tests_path = File.expand_path('../../tmp', __dir__)
+
+logger = Logger.new($stdout)
+logger.level = Logger::WARN unless ENV['DEBUG']
+
+Elasticsearch::Tests::TestRunner.new(client, tests_path, logger).run
+```
+
+You need to pass in a client, the path where the YAML files are located (optional, will default to `./tmp`) and (optionaly) an object that implements Logger. The tests are designed for the Elasticsearch REST API and the Elasticsearch Serverless REST API. If you pass in an `ElasticsearchServerless::Client`, it will only run the tests that have the `requires.serverless: true` statement. Otherwise, it will only run the ones with `requires.stack: true`.
+
+You can download the YAML test files from [the clients tests project](https://github.com/elastic/elasticsearch-clients-tests) with the following code:
+
+```ruby
+require 'elasticsearch/tests/downloader'
+Elasticsearch::Tests::Downloader::run(tests_path)
+```
 
 ## Development
 
@@ -28,4 +51,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/elasticsearch-tests.
+Bug reports and pull requests are welcome on GitHub at https://github.com/elastic/elasticsearch-tests.

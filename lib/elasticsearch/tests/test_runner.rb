@@ -30,7 +30,7 @@ module Elasticsearch
       def initialize(client, path = nil, logger = nil)
         @client = client
         @serverless = (defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client))
-        @path = path || File.expand_path('../../../../tmp', __dir__)
+        @path = path || File.expand_path('./tmp', __dir__)
         @logger = logger || LOGGER
       end
 
