@@ -66,7 +66,7 @@ module Elasticsearch
            )
           print_success
         else
-          print_match_failure(action, @response)
+          print_match_failure(action)
         end
       end
 

@@ -27,12 +27,12 @@ module Elasticsearch
     class Test
       include Elasticsearch::Tests::CodeRunner
 
-      def initialize(title, file, setup, actions, teardown, client)
-        @title = title
+      def initialize(yaml, file, client)
+        @setup = extract_setup!(yaml)
+        @teardown = extract_teardown!(yaml)
+        @title = yaml.first.keys.first
+        @actions = yaml.first[@title]
         @file = test_filename(file)
-        @setup = setup
-        @actions = actions
-        @teardown = teardown
         @client = client
       end
 
@@ -75,7 +75,9 @@ module Elasticsearch
       def run_setup
         return unless @setup
 
-        @setup.map { |step| do_action(step['do']) }
+        @setup.map do |step|
+          do_action(step['do']) if step['do']
+        end
       end
 
       def run_teardown
@@ -91,6 +93,18 @@ module Elasticsearch
       def test_filename(file)
         name = file.split('/')
         "#{name[-2]}/#{name[-1]}"
+      end
+
+      def extract_setup!(yaml)
+        yaml.map.with_index do |a, i|
+          yaml.delete_at(i) if a.keys.first == 'setup'
+        end.compact.first&.[]('setup')
+      end
+
+      def extract_teardown!(yaml)
+        yaml.map.with_index do |a, i|
+          yaml.delete_at(i) if a.keys.first == 'teardown'
+        end.compact.first
       end
     end
   end

@@ -62,21 +62,13 @@ module Elasticsearch
 
       def build_and_run_tests(test_file)
         yaml = YAML.load_stream(File.read(test_file))
-        requires = extract_requires(yaml).compact.first['requires']
+        requires = extract_requires!(yaml).compact.first['requires']
+        return unless (requires['serverless'] == true && @serverless) ||
+                      (requires['stack'] == true && !@serverless)
 
-        if @serverless
-          return unless requires['serverless'] == true
-        else
-          return unless requires['stack'] == true
-        end
-        setup = extract_setup(yaml)
-        teardown = extract_teardown(yaml)
-        yaml.each do |test_data|
-          title, actions = test_data.first
-          test = Elasticsearch::Tests::Test.new(title, test_file, setup, actions, teardown, @client)
-          test.execute
-          @tests_count += test.count
-        end
+        test = Elasticsearch::Tests::Test.new(yaml, test_file, @client)
+        test.execute
+        @tests_count += test.count
       rescue StandardError => e
         raise e
       end
@@ -91,22 +83,10 @@ module Elasticsearch
         end
       end
 
-      def extract_requires(yaml)
+      def extract_requires!(yaml)
         yaml.map.with_index do |a, i|
           yaml.delete_at(i) if a.keys.first == 'requires'
         end.compact
-      end
-
-      def extract_setup(yaml)
-        yaml.map.with_index do |a, i|
-          yaml.delete_at(i) if a.keys.first == 'setup'
-        end.compact.first&.[]('setup')
-      end
-
-      def extract_teardown(yaml)
-        yaml.map.with_index do |a, i|
-          yaml.delete_at(i) if a.keys.first == 'teardown'
-        end.compact.first
       end
     end
   end

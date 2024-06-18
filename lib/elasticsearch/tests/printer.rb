@@ -40,7 +40,7 @@ module Elasticsearch
         else
           pp response
         end
-        raise Elastic::TestRunner::TestFailure
+        raise Elasticsearch::Tests::TestFailure
       end
 
       def print_match_failure(action)
@@ -51,16 +51,15 @@ module Elasticsearch
           Expected: { #{keys}: #{value} }
           Actual  : { #{keys}: #{search_in_response(action['match'].keys.first)} }
         MSG
-        logger.debug @response
-        raise Elastic::TestRunner::TestFailure.new(message)
+        raise Elasticsearch::Tests::TestFailure.new(message)
       end
 
-      def print_error(e)
+      def print_error(error)
         puts "❌ ERROR: #{@file} #{@title} failed\n"
-        logger.error e.display
-        backtrace = e.backtrace.join("\n")
+        logger.error error.display
+        backtrace = error.backtrace.join("\n")
         logger.error "#{backtrace}\n"
-        raise e
+        raise error
       end
 
       def self.display_errors(errors)
