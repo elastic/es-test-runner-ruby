@@ -21,13 +21,12 @@ module Elasticsearch
     # Module for downloading the test files
     module Downloader
       class << self
-        # TODO: Make branch a parameter
-        URL = 'https://api.github.com/repos/elastic/serverless-clients-tests/zipball/main'.freeze
         FILENAME = 'tests.zip'.freeze
 
-        def run(path)
+        def run(path, branch = 'main')
           delete_files(path)
-          if download_tests
+          url = "https://api.github.com/repos/elastic/serverless-clients-tests/zipball/#{branch}"
+          if download_tests(url)
             puts "Successfully downloaded #{FILENAME}"
           else
             warn "[!] Couldn't download #{FILENAME}"
@@ -37,9 +36,10 @@ module Elasticsearch
           File.delete(FILENAME)
         end
 
-        def download_tests
+        def download_tests(url)
           File.open(FILENAME, 'w') do |downloaded_file|
-            URI.open(URL, 'Accept' => 'application/vnd.github+json') do |artifact_file|
+            uri = URI.parse(url)
+            uri.open('Accept' => 'application/vnd.github+json') do |artifact_file|
               downloaded_file.write(artifact_file.read)
             end
           end
