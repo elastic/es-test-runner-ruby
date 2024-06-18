@@ -1,20 +1,14 @@
 # Elasticsearch Tests Runner
 
-This gem is a runner for Elasticsearch clients to run the [Elasticsearch Clients Tests](https://github.com/elastic/elasticsearch-clients-tests). It's a test suite in the YAML format to reuse across different Elasticsearch clients in different programming languages.
-
-
+This gem is a runner for Elasticsearch Ruby clients to run the [Elasticsearch Clients Tests](https://github.com/elastic/elasticsearch-clients-tests). The Client tests project is a test suite in the YAML format. It defines a set of actions that can be run with Elasticsearch clients, with the goal to reuse across different Elasticsearch clients in different programming languages.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add the gem to the application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add elasticsearch-test-runner
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install elasticsearch-test-runner
+```ruby
+gem 'elasticsearch-test-runner', git: 'git@github.com:elastic/es-test-runner-ruby.git'
+```
 
 ## Usage
 
@@ -51,4 +45,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/elastic/elasticsearch-tests.
+Bug reports and pull requests are welcome on GitHub at https://github.com/elastic/es-test-runner-ruby.
