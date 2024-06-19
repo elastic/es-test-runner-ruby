@@ -20,15 +20,23 @@ To start using the library, add this to your code:
 # Require the library
 require 'elasticsearch/tests/test_runner'
 # Define a path where the test files are being stored:
-tests_path = File.expand_path('../../tmp', __dir__)
+tests_path = File.expand_path('./tmp', __dir__)
+# Instantiate an Elasticsearch client
+client = Elasticsearch::Client.new
+# Instantiate and run the test runner:
+Elasticsearch::Tests::TestRunner.new(client, tests_path).run
+```
 
+[The tests](https://github.com/elastic/elasticsearch-clients-tests) are designed for the Elasticsearch REST API and the Elasticsearch Serverless REST API. If you pass in an `ElasticsearchServerless::Client`, it will only run the tests that have the `requires.serverless: true` statement. Otherwise, it will only run the ones with `requires.stack: true`.
+
+You can optionally pass in an object that implements Ruby's Logger to the `TestRunner` initializer. This will log more information, particularly useful in the case of errors where it'll log stacktraces for exceptions and more:
+
+```ruby
 logger = Logger.new($stdout)
 logger.level = Logger::WARN unless ENV['DEBUG']
 
 Elasticsearch::Tests::TestRunner.new(client, tests_path, logger).run
 ```
-
-You need to pass in a client, the path where the YAML files are located (optional, will default to `./tmp`) and (optionaly) an object that implements Logger. The tests are designed for the Elasticsearch REST API and the Elasticsearch Serverless REST API. If you pass in an `ElasticsearchServerless::Client`, it will only run the tests that have the `requires.serverless: true` statement. Otherwise, it will only run the ones with `requires.stack: true`.
 
 You can **download the YAML test files** from [the clients tests project](https://github.com/elastic/elasticsearch-clients-tests) with the following code:
 
