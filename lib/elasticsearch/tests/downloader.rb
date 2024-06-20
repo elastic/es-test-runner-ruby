@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 require 'open-uri'
+require 'fileutils'
 
 module Elasticsearch
   module Tests
