@@ -1,5 +1,9 @@
 ## [Unreleased]
 
-## [0.1.0] - 2024-02-22
+## [0.1.1] - 2024-06-20
 
-- Initial release
+- Require 'fileutils' in Downloader.
+
+## [0.1.0] - 2024-06-20
+
+- Initial release.
