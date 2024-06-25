@@ -29,7 +29,7 @@ module Elasticsearch
 
       def initialize(client, path = nil, logger = nil)
         @client = client
-        @serverless = (defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client))
+        @serverless = defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client)
         @path = path || File.expand_path('./tmp', __dir__)
         @logger = logger || LOGGER
       end
@@ -74,13 +74,14 @@ module Elasticsearch
       end
 
       def select_test_files(test_files)
-        if test_files.empty?
-          Dir.glob("#{@path}/**/*.yml")
-        else
-          test_files.map do |test_file|
-            "#{@path}/tests/#{test_file}"
-          end
-        end
+        tests_path = if test_files.empty?
+                       "#{@path}/**/*.yml"
+                     elsif test_files.include?('yml')
+                       "#{@path}/#{test_files}"
+                     else
+                       "#{@path}/#{test_files}/*.yml"
+                     end
+        Dir.glob(tests_path)
       end
 
       def extract_requires!(yaml)
