@@ -35,8 +35,29 @@ You can optionally pass in an object that implements Ruby's Logger to the `TestR
 logger = Logger.new($stdout)
 logger.level = Logger::WARN unless ENV['DEBUG']
 
-Elasticsearch::Tests::TestRunner.new(client, tests_path, logger).run
+runner = Elasticsearch::Tests::TestRunner.new(client, tests_path, logger)
+runner.run
 ```
+
+When you run the tests, you can pass in the name of a particular test or a whole test folder, to run only those tests. Tests in the clients project are located [in the `tests` directory](https://github.com/elastic/elasticsearch-clients-tests/tree/main/tests) either as single yaml files or inside a specific directory, referring to a specific namespace. For example [`tests/get.yml`](https://github.com/elastic/elasticsearch-clients-tests/blob/main/tests/get.yml) and [`tests/bulk/10_basic.yml`](https://github.com/elastic/elasticsearch-clients-tests/blob/main/tests/bulk/10_basic.yml). If you want to run the `get.yml` test, you can pass in the file name to `run`:
+
+```ruby
+runner.run('get.yml')
+```
+
+If you want to run the basic bulk tests, you can run:
+
+```ruby
+runner.run('bulk/10_basic.yml')
+```
+
+If you want to run all the tests in a directory, you can pass in the directory:
+
+```ruby
+runner.run('indices')
+```
+
+This will run all the tests in [`tests/indices`](https://github.com/elastic/elasticsearch-clients-tests/tree/main/tests/indices) such as `alias.yml`, `analyze.yml`, and so on.
 
 You can **download the YAML test files** from [the clients tests project](https://github.com/elastic/elasticsearch-clients-tests) with the following code:
 
