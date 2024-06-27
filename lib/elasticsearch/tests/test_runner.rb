@@ -59,6 +59,9 @@ module Elasticsearch
           @errors << { error: e, file: test_file }
           @logger.warn("YAML error in #{test_file}")
           @logger.warn e
+        rescue ActionError => e
+          @errors << { error: e, file: test_file, action: e.action }
+          @logger.debug e
         rescue StandardError => e
           @errors << { error: e, file: test_file }
           @logger.debug e
