@@ -19,5 +19,16 @@ module Elasticsearch
   module Tests
     class TestFailure < StandardError; end
     class TestError < StandardError; end
+
+    # Class to track exactly which action errored
+    class ActionError < StandardError
+      attr_reader :test_file, :action
+
+      def initialize(message, test_file, action)
+        super(message)
+        @test_file = test_file
+        @action = action
+      end
+    end
   end
 end

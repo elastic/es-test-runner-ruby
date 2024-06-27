@@ -16,6 +16,7 @@
 # under the License.
 
 require_relative 'code_runner'
+require_relative 'errors'
 
 module Elasticsearch
   module Tests
@@ -70,6 +71,8 @@ module Elasticsearch
         when 'gt', 'gte', 'lt', 'lte'
           compare(action)
         end
+      rescue StandardError => e
+        raise ActionError.new(e.message, @file, action)
       end
 
       def run_setup

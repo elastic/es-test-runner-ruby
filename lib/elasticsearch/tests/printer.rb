@@ -40,7 +40,7 @@ module Elasticsearch
         else
           pp response
         end
-        raise Elasticsearch::Tests::TestFailure
+        raise Elasticsearch::Tests::ActionError.new('ERROR', @file, action)
       end
 
       def print_match_failure(action)
@@ -65,7 +65,9 @@ module Elasticsearch
       def self.display_errors(errors)
         puts "+++ ❌ Errors/Failures: #{errors.count}"
         errors.map do |error|
-          puts "* Test: #{error[:file]}\n #{error[:error].message}"
+          puts "🧪 Test: #{error[:file]}"
+          puts "▶ Action: #{error[:action]['do']}" if error[:action]
+          puts "🔬 #{error[:error].message}"
           pp error[:error].backtrace.join("$/\n") if ENV['DEBUG']
           puts
         end
