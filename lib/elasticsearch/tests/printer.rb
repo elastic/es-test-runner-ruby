@@ -34,18 +34,21 @@ module Elasticsearch
       def print_failure(action, response)
         puts "🔴 #{@file} #{@title} failed"
         puts "Expected result: #{action}" # TODO: Show match/length differently
-        if response.is_a?(ElasticsearchServerless::API::Response)
+        if defined?(ElasticsearchServerless) &&
+           response.is_a?(ElasticsearchServerless::API::Response) ||
+           defined?(Elasticsearch::API) && response.is_a?(Elasticsearch::API::Response)
           puts 'Response:'
           pp response.body
         else
           pp response
         end
-        raise Elasticsearch::Tests::ActionError.new('ERROR', @file, action)
+        raise Elasticsearch::Tests::ActionError.new(response.body, @file, action)
       end
 
       def print_match_failure(action)
         keys = action['match'].keys.first
         value = action['match'].values.first
+
         message = <<~MSG
           🔴 #{@file} #{@title} failed
           Expected: { #{keys}: #{value} }
@@ -66,7 +69,7 @@ module Elasticsearch
         puts "+++ ❌ Errors/Failures: #{errors.count}"
         errors.map do |error|
           puts "🧪 Test: #{error[:file]}"
-          puts "▶ Action: #{error[:action]['do']}" if error[:action]
+          puts "▶ Action: #{error[:action].first}" if error[:action]
           puts "🔬 #{error[:error].message}"
           pp error[:error].backtrace.join("$/\n") if ENV['DEBUG']
           puts
