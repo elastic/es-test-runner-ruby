@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [0.4.0] - 2024-07-08
+
+- Refactors display of errors/passing tests. Adds `QUIET` environment variable parsing. If `true`, display for passing tests will be more compact (not showing file/test names).
+- Updates count for better accuracy in test results.
+- Rescues SystemExit, Interrupt to actually exit the script
+- Adds support for catch in tests: If the arguments to `do` include `catch`, then we are expecting an error, which should be caught and tested.
+
 ## [0.3.1] - 2024-06-27
 
 - Fixes in error handling.
