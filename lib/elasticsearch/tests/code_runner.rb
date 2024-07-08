@@ -35,6 +35,7 @@ module Elasticsearch
       # specifications. These are function calls to the Elasticsearch clients.
       #
       def do_action(action)
+        catchable = action.delete('catch')
         client = @client
         action = action.first if action.is_a?(Array)
         method, params = action.is_a?(String) ? [action, {}] : action.first
@@ -47,9 +48,40 @@ module Elasticsearch
         end
 
         @response = client.send(method.to_sym, process_params(params))
+        puts @response if ENV['DEBUG']
         @response
       rescue StandardError => e
-        raise e
+        raise e unless expected_exception?(catchable, e)
+
+        @response
+      end
+
+      def expected_exception?(error_type, e)
+        case error_type
+        when 'request_timeout'
+          e.is_a?(Elastic::Transport::Transport::Errors::RequestTimeout)
+        when 'missing'
+          e.is_a?(Elastic::Transport::Transport::Errors::NotFound)
+        when 'conflict'
+          e.is_a?(Elastic::Transport::Transport::Errors::Conflict)
+        when 'request'
+          e.is_a?(Elastic::Transport::Transport::Errors::InternalServerError)
+        when 'bad_request'
+          e.is_a?(Elastic::Transport::Transport::Errors::BadRequest)
+        when 'param'
+          actual_error.is_a?(ArgumentError)
+        when 'unauthorized'
+          e.is_a?(Elastic::Transport::Transport::Errors::Unauthorized)
+        when 'forbidden'
+          e.is_a?(Elastic::Transport::Transport::Errors::Forbidden)
+        when /error parsing field/, /illegal_argument_exception/
+          e.message =~ /\[400\]/ ||
+            e.is_a?(Elastic::Transport::Transport::Errors::BadRequest)
+        when /NullPointerException/
+          e.message =~ /\[400\]/
+        else
+          e.message =~ /#{error_type}/
+        end
       end
 
       # Code for matching expectations and response
