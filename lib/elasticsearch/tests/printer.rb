@@ -28,7 +28,11 @@ module Elasticsearch
                    else
                      @response.status
                    end
-        puts "🟢 #{@file} #{@title} passed. Response: #{response}"
+        if ENV['QUIET']
+          print "🟢 "
+        else
+          puts "🟢 #{@file} #{@title} passed. Response: #{response}"
+        end
       end
 
       def print_failure(action, response)
@@ -70,13 +74,14 @@ module Elasticsearch
         errors.map do |error|
           puts "🧪 Test: #{error[:file]}"
           puts "▶ Action: #{error[:action].first}" if error[:action]
-          puts "🔬 #{error[:error].message}"
+          puts "🔬 #{error.class} - #{error[:error].message}"
           pp error[:error].backtrace.join("$/\n") if ENV['DEBUG']
           puts
         end
       end
 
       def self.display_summary(tests_count, errors_count, start_time)
+        puts
         puts "--- 🧪 Tests: #{tests_count} | Passed: #{tests_count - errors_count} | Failed: #{errors_count}"
         puts "--- ⏲  Elapsed time: #{Time.at(Time.now - start_time).utc.strftime("%H:%M:%S")}"
       end
