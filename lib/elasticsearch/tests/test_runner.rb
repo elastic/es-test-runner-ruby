@@ -65,6 +65,8 @@ module Elasticsearch
         rescue StandardError => e
           @errors << { error: e, file: test_file }
           @logger.debug e
+        rescue SystemExit, Interrupt
+          exit
         end
       end
 
