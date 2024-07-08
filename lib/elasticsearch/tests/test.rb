@@ -90,7 +90,7 @@ module Elasticsearch
       end
 
       def count
-        @actions.length
+        @actions.select { |a| a.keys.first == 'do' }.count
       end
 
       def test_filename(file)
