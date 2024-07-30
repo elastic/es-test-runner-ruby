@@ -55,6 +55,8 @@ module Elasticsearch
       end
 
       def expected_exception?(error_type, e)
+        return false if error_type.nil?
+
         case error_type
         when 'request_timeout'
           e.is_a?(Elastic::Transport::Transport::Errors::RequestTimeout)
