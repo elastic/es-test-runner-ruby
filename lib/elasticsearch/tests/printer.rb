@@ -29,7 +29,7 @@ module Elasticsearch
                      @response.status
                    end
         if ENV['QUIET']
-          print "🟢 "
+          print '🟢 '
         else
           puts "🟢 #{@file} #{@title} passed. Response: #{response}"
         end
