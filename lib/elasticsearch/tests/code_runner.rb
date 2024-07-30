@@ -47,7 +47,6 @@ module Elasticsearch
           client = @client.send(arrayed_method.first)
           method = arrayed_method.last
         end
-
         @response = client.send(method.to_sym, process_params(params))
         puts @response if ENV['DEBUG']
         @response
