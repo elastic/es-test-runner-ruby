@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.5.0] - 2024-07-30
+
+- Clears `@response` before running a new action
+- Fixes `expected_exception?` for failures
+
 ## [0.4.0] - 2024-07-08
 
 - Refactors display of errors/passing tests. Adds `QUIET` environment variable parsing. If `true`, display for passing tests will be more compact (not showing file/test names).
