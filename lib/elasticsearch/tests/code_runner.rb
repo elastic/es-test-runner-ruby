@@ -35,6 +35,7 @@ module Elasticsearch
       # specifications. These are function calls to the Elasticsearch clients.
       #
       def do_action(action)
+        @response = nil
         catchable = action.delete('catch')
         client = @client
         action = action.first if action.is_a?(Array)
@@ -52,8 +53,6 @@ module Elasticsearch
         @response
       rescue StandardError => e
         raise e unless expected_exception?(catchable, e)
-
-        @response
       end
 
       def expected_exception?(error_type, e)
