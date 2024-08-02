@@ -38,6 +38,12 @@ module Elasticsearch
         @response = nil
         catchable = action.delete('catch')
         client = @client
+        if action['headers']
+          client.transport.options[:transport_options][:headers].merge(
+            { headers: action.delete('headers') }
+          )
+        end
+
         action = action.first if action.is_a?(Array)
         method, params = action.is_a?(String) ? [action, {}] : action.first
 
