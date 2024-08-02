@@ -57,6 +57,7 @@ module Elasticsearch
           🔴 #{@file} #{@title} failed
           Expected: { #{keys}: #{value} }
           Actual  : { #{keys}: #{search_in_response(action['match'].keys.first)} }
+          Response: #{@response}
         MSG
         raise Elasticsearch::Tests::TestFailure.new(message)
       end
