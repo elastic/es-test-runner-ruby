@@ -1,4 +1,9 @@
-## [Unreleased]
+# Changelog
+
+## [0.6.0] - 2024-08-07
+
+- Adds `header` support, headers can be specified for an action.
+- Show response in errors.
 
 ## [0.5.0] - 2024-07-30
 
