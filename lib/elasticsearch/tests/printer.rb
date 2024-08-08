@@ -28,7 +28,7 @@ module Elasticsearch
                    else
                      @response.status
                    end
-        if ENV['QUIET']
+        if ENV['QUIET'] == 'true'
           print '🟢 '
         else
           puts "🟢 #{@short_name} #{@title} passed. Response: #{response}"
