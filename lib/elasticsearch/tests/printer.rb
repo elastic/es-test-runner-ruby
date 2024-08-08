@@ -31,12 +31,12 @@ module Elasticsearch
         if ENV['QUIET']
           print '🟢 '
         else
-          puts "🟢 #{@file} #{@title} passed. Response: #{response}"
+          puts "🟢 #{@short_name} #{@title} passed. Response: #{response}"
         end
       end
 
       def print_failure(action, response)
-        puts "🔴 #{@file} #{@title} failed"
+        puts "🔴 #{@short_name} #{@title} failed"
         puts "Expected result: #{action}" # TODO: Show match/length differently
         if defined?(ElasticsearchServerless) &&
            response.is_a?(ElasticsearchServerless::API::Response) ||
@@ -46,7 +46,7 @@ module Elasticsearch
         else
           pp response
         end
-        raise Elasticsearch::Tests::ActionError.new(response.body, @file, action)
+        raise Elasticsearch::Tests::ActionError.new(response.body, @short_name, action)
       end
 
       def print_match_failure(action)
@@ -54,7 +54,7 @@ module Elasticsearch
         value = action['match'].values.first
 
         message = <<~MSG
-          🔴 #{@file} #{@title} failed
+          🔴 #{@short_name} #{@title} failed
           Expected: { #{keys}: #{value} }
           Actual  : { #{keys}: #{search_in_response(action['match'].keys.first)} }
           Response: #{@response}
@@ -63,7 +63,7 @@ module Elasticsearch
       end
 
       def print_error(error)
-        puts "❌ ERROR: #{@file} #{@title} failed\n"
+        puts "❌ ERROR: #{@short_name} #{@title} failed\n"
         logger.error error.display
         backtrace = error.backtrace.join("\n")
         logger.error "#{backtrace}\n"

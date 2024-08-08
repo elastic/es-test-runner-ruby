@@ -53,8 +53,9 @@ module Elasticsearch
         @tests_count = 0
         @errors = []
 
-        @test_files.map do |test_file|
-          build_and_run_tests(test_file)
+        @test_files.map do |test_path|
+          test_file = test_filename(test_path)
+          build_and_run_tests(test_path)
         rescue Psych::SyntaxError => e
           @errors << { error: e, file: test_file }
           @logger.warn("YAML error in #{test_file}")
@@ -70,17 +71,22 @@ module Elasticsearch
         end
       end
 
-      def build_and_run_tests(test_file)
-        yaml = YAML.load_stream(File.read(test_file))
+      def build_and_run_tests(test_path)
+        yaml = YAML.load_stream(File.read(test_path))
         requires = extract_requires!(yaml).compact.first['requires']
         return unless (requires['serverless'] == true && @serverless) ||
                       (requires['stack'] == true && !@serverless)
 
-        test = Elasticsearch::Tests::Test.new(yaml, test_file, @client)
+        test = Elasticsearch::Tests::Test.new(yaml, test_path, @client)
         test.execute
         @tests_count += test.count
       rescue StandardError => e
         raise e
+      end
+
+      def test_filename(file)
+        name = file.split('/')
+        "#{name[-2]}/#{name[-1]}"
       end
 
       def select_test_files(test_files)

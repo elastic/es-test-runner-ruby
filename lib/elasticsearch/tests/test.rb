@@ -33,7 +33,9 @@ module Elasticsearch
         @teardown = extract_teardown!(yaml)
         @title = yaml.first.keys.first
         @actions = yaml.first[@title]
-        @file = test_filename(file)
+        @file = file
+        name = file.split('/')
+        @short_name = "#{name[-2]}/#{name[-1]}"
         @client = client
       end
 
@@ -91,11 +93,6 @@ module Elasticsearch
 
       def count
         @actions.select { |a| a.keys.first == 'do' }.count
-      end
-
-      def test_filename(file)
-        name = file.split('/')
-        "#{name[-2]}/#{name[-1]}"
       end
 
       def extract_setup!(yaml)
