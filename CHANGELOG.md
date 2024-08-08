@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.0] - 2024-08-08
+
+- Improves test (file) name display
+- Updates QUIET environment variable check
+
 ## [0.6.0] - 2024-08-07
 
 - Adds `header` support, headers can be specified for an action.
