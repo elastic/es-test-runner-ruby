@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.0] - 2024-08-14
+
+- Adds support for variable keys (`$`).
+
 ## [0.7.0] - 2024-08-08
 
 - Improves test (file) name display
