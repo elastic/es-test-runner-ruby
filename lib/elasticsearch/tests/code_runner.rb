@@ -176,13 +176,11 @@ module Elasticsearch
       # Given a key coming from a test definition, search the response body for a matching value.
       #
       def search_in_response(keys)
-        if (match = /\$([a-z]+)/.match(keys))
-          return @response.send(match[1])
-        end
-
         if keys.include?('.')
           key = split_and_parse_key(keys)
           return find_value_in_document(key, @response.body)
+        elsif (match = /\$([a-z]+)/.match(keys))
+          return @response.send(match[1])
         end
 
         @response[keys]
@@ -217,7 +215,9 @@ module Elasticsearch
         return document[chain[0]] unless chain.size > 1
 
         # a number can be a string key in a Hash or indicate an element in a list
-        if document.is_a?(Hash)
+        if chain[0].is_a?(String) && chain[0].match?(/^\$/)
+          find_value_in_document(chain[1..], instance_variable_get("@#{chain[0].gsub('$', '')}"))
+        elsif document.is_a?(Hash)
           find_value_in_document(chain[1..], document[chain[0].to_s]) if document[chain[0].to_s]
         elsif document[chain[0]]
           find_value_in_document(chain[1..], document[chain[0]]) if document[chain[0]]
