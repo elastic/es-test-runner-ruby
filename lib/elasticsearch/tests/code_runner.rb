@@ -111,7 +111,9 @@ module Elasticsearch
       end
 
       def match_regexp(expected, result)
-        expected.is_a?(String) && expected.match?(/^\//) && result.match?(Regexp.new(expected.gsub('/', '')))
+        expected.is_a?(String) &&
+          expected.match?(/^\//) &&
+          result.match?(Regexp.new(expected.gsub('/', '').strip))
       end
 
       def do_length(action)
