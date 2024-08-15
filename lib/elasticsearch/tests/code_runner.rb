@@ -54,7 +54,7 @@ module Elasticsearch
           method = arrayed_method.last
         end
         @response = client.send(method.to_sym, process_params(params))
-        puts @response if ENV['DEBUG']
+        puts "Action: #{action}\nResponse: #{@response}\n\n" if ENV['DEBUG']
         @response
       rescue StandardError => e
         raise e unless expected_exception?(catchable, e)
