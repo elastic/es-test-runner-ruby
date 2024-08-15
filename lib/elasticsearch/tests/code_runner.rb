@@ -66,7 +66,7 @@ module Elasticsearch
         case error_type
         when 'request_timeout'
           e.is_a?(Elastic::Transport::Transport::Errors::RequestTimeout)
-        when 'missing'
+        when 'missing', /resource_not_found_exception/
           e.is_a?(Elastic::Transport::Transport::Errors::NotFound)
         when 'conflict'
           e.is_a?(Elastic::Transport::Transport::Errors::Conflict)
@@ -85,6 +85,8 @@ module Elasticsearch
             e.is_a?(Elastic::Transport::Transport::Errors::BadRequest)
         when /NullPointerException/
           e.message =~ /\[400\]/
+        when /status_exception/
+          e.message =~ /\[409\]/
         else
           e.message =~ /#{error_type}/
         end
