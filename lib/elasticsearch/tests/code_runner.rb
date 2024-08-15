@@ -204,7 +204,13 @@ module Elasticsearch
       end
 
       def set_param_variable(params, key, param)
-        params[key] = instance_variable_get(param.gsub('$', '@')) if param.is_a?(String) && param.include?('$')
+        return unless param.is_a?(String) && param.include?("$")
+
+        # Param can be a single '$value' string or '{ something: $value }'
+        repleacable = param.match(/(\$[0-9a-z_-]+)/)[0]
+        value = instance_variable_get(repleacable.gsub("$", "@"))
+        content = param.gsub(repleacable, value)
+        params[key] = content
       end
 
       # Given a list of keys, find the value in a recursively nested document.
