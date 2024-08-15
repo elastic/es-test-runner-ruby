@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0] - 2024-08-15
+
+- Better display of action and response when `ENV['DEBUG']` is true.
+- Checks for more error types when catching exceptions.
+- Better matching for regular expressions.
+- Refactors `set_param_variable` for better substitution.
+
 ## [0.8.0] - 2024-08-14
 
 - Adds support for variable keys (`$`).
