@@ -57,7 +57,11 @@ module Elasticsearch
         puts "Action: #{action}\nResponse: #{@response}\n\n" if ENV['DEBUG']
         @response
       rescue StandardError => e
-        raise e unless expected_exception?(catchable, e)
+        if expected_exception?(catchable, e)
+          puts "Catchable: #{e}\nResponse: #{@response}\n" if ENV['DEBUG']
+        else
+          raise e
+        end
       end
 
       def expected_exception?(error_type, e)
