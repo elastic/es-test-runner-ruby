@@ -93,7 +93,7 @@ module Elasticsearch
         tests_path = if test_files.empty?
                        "#{@path}/**/*.yml"
                      elsif test_files.include?('yml')
-                       "#{@path}/#{test_files}"
+                       return ["#{@path}/tests/#{test_files}"]
                      else
                        "#{@path}/#{test_files}/*.yml"
                      end
