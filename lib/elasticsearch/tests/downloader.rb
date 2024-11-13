@@ -52,6 +52,7 @@ module Elasticsearch
         def untar_file(path)
           puts 'Extracting tar files'
           puts path
+          FileUtils.mkdir_p(path) unless File.directory?(path)
           `tar -zxf #{FILENAME} --strip-components=1 -C #{path}/`
           puts 'Removing tar file'
         end
