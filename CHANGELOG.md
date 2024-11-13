@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.1] - 2024-11-13
+
+- Creates directory for tests if it doesn't exist.
+
 ## [0.10.0] - 2024-11-13
 
 - Using tar.gz file for downloaded tests instead of zip file.
