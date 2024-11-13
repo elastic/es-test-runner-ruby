@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.10.0] - 2024-11-13
+
+- Using tar.gz file for downloaded tests instead of zip file.
+- Updates logging and debug information. More information being logged for different levels of Logger.
+
 ## [0.9.0] - 2024-08-15
 
 - Better display of action and response when `ENV['DEBUG']` is true.
