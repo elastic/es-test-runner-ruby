@@ -22,18 +22,18 @@ module Elasticsearch
     # Module for downloading the test files
     module Downloader
       class << self
-        FILENAME = 'tests.zip'.freeze
+        FILENAME = 'tests.tar.gz'.freeze
 
         def run(path, branch = 'main')
           delete_files(path)
-          url = "https://api.github.com/repos/elastic/serverless-clients-tests/zipball/#{branch}"
+          url = "https://api.github.com/repos/elastic/serverless-clients-tests/tarball/#{branch}"
           if download_tests(url)
             puts "Successfully downloaded #{FILENAME}"
           else
             warn "[!] Couldn't download #{FILENAME}"
             return
           end
-          unzip_file(path)
+          untar_file(path)
           File.delete(FILENAME)
         end
 
@@ -49,11 +49,11 @@ module Elasticsearch
 
         private
 
-        def unzip_file(path)
-          puts 'Unzipping files'
+        def untar_file(path)
+          puts 'Extracting tar files'
           puts path
-          `unzip #{FILENAME} -d #{path}/`
-          puts 'Removing zip file'
+          `tar -zxf #{FILENAME} --strip-components=1 -C #{path}/`
+          puts 'Removing tar file'
         end
 
         def delete_files(path)
