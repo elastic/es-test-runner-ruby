@@ -70,21 +70,28 @@ module Elasticsearch
         raise error
       end
 
-      def self.display_errors(errors)
+      def self.display_errors(errors, logger)
         puts "+++ ❌ Errors/Failures: #{errors.count}"
         errors.map do |error|
-          puts "🧪 Test: #{error[:file]}"
-          puts "▶ Action: #{error[:action].first}" if error[:action]
-          puts "🔬 #{error.class} - #{error[:error].message}"
-          pp error[:error].backtrace.join("$/\n") if ENV['DEBUG']
-          puts
+          message = []
+          message << "🧪 Test: #{error[:file]}"
+          message << "▶ Action: #{error[:action].first}" if error[:action]
+          message << "🔬 #{error.class} - #{error[:error].message}"
+          message << error[:error].backtrace.join("$/\n") if ENV['DEBUG']
+          puts message.join("\n")
+          logger.error(message.join("\n"))
         end
       end
 
-      def self.display_summary(tests_count, errors_count, start_time)
+      def self.display_summary(tests_count, errors_count, start_time, logger)
         puts
-        puts "--- 🧪 Tests: #{tests_count} | Passed: #{tests_count - errors_count} | Failed: #{errors_count}"
-        puts "--- ⏲  Elapsed time: #{Time.at(Time.now - start_time).utc.strftime("%H:%M:%S")}"
+        summary = "🧪 Tests: #{tests_count} | Passed: #{tests_count - errors_count} | Failed: #{errors_count}"
+        logger.info summary
+        puts "--- #{summary}"
+
+        duration = "⏲  Elapsed time: #{Time.at(Time.now - start_time).utc.strftime('%H:%M:%S')}"
+        logger.info duration
+        puts "--- #{duration}"
       end
     end
   end

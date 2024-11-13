@@ -25,7 +25,7 @@ module Elasticsearch
     # Main YAML test runner
     class TestRunner
       LOGGER = Logger.new($stdout)
-      LOGGER.level = Logger::WARN unless ENV['DEBUG']
+      LOGGER.level = ENV['DEBUG'] ? Logger::DEBUG : Logger::WARN
 
       def initialize(client, path = nil, logger = nil)
         @client = client
@@ -39,8 +39,8 @@ module Elasticsearch
 
         @test_files = select_test_files(test_files)
         run_the_tests
-        Elasticsearch::Tests::Printer::display_errors(@errors) unless @errors.empty?
-        Elasticsearch::Tests::Printer::display_summary(@tests_count, @errors.count, @start_time)
+        Elasticsearch::Tests::Printer::display_errors(@errors, @logger) unless @errors.empty?
+        Elasticsearch::Tests::Printer::display_summary(@tests_count, @errors.count, @start_time, @logger)
         if @errors.empty?
           exit 0
         else
