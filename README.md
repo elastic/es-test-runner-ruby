@@ -29,6 +29,9 @@ Elasticsearch::Tests::TestRunner.new(client, tests_path).run
 
 [The tests](https://github.com/elastic/elasticsearch-clients-tests) are designed for the Elasticsearch REST API and the Elasticsearch Serverless REST API. If you pass in an `ElasticsearchServerless::Client`, it will only run the tests that have the `requires.serverless: true` statement. Otherwise, it will only run the ones with `requires.stack: true`.
 
+
+### Logging
+
 You can optionally pass in an object that implements Ruby's Logger to the `TestRunner` initializer. This will log more information, particularly useful in the case of errors where it'll log stacktraces for exceptions and more:
 
 ```ruby
@@ -38,6 +41,8 @@ logger.level = Logger::WARN unless ENV['DEBUG']
 runner = Elasticsearch::Tests::TestRunner.new(client, tests_path, logger)
 runner.run
 ```
+
+### Running particular tests
 
 When you run the tests, you can pass in the name of a particular test or a whole test folder, to run only those tests. Tests in the clients project are located [in the `tests` directory](https://github.com/elastic/elasticsearch-clients-tests/tree/main/tests) either as single yaml files or inside a specific directory, referring to a specific namespace. For example [`tests/get.yml`](https://github.com/elastic/elasticsearch-clients-tests/blob/main/tests/get.yml) and [`tests/bulk/10_basic.yml`](https://github.com/elastic/elasticsearch-clients-tests/blob/main/tests/bulk/10_basic.yml). If you want to run the `get.yml` test, you can pass in the file name to `run`:
 
@@ -59,6 +64,8 @@ runner.run('indices')
 
 This will run all the tests in [`tests/indices`](https://github.com/elastic/elasticsearch-clients-tests/tree/main/tests/indices) such as `alias.yml`, `analyze.yml`, and so on.
 
+### Skipping tests
+
 If you want to skip any given tests, you can do it using `add_tests_to_skip` before calling `run` like this:
 
 ```ruby
@@ -66,6 +73,8 @@ runner.add_tests_to_skip(['bulk/10_basic.yml', 'get.yml'])
 ```
 
 You need to pass in an Array of file or folder names, or a single test file as a String.
+
+### Downloading the test suite
 
 You can **download the YAML test files** from [the clients tests project](https://github.com/elastic/elasticsearch-clients-tests) with the following code:
 
