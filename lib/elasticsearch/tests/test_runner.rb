@@ -32,6 +32,15 @@ module Elasticsearch
         @serverless = defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client)
         @path = path || File.expand_path('./tmp', __dir__)
         @logger = logger || LOGGER
+        @tests_to_skip = []
+      end
+
+      def add_tests_to_skip(tests)
+        if tests.is_a? String
+          @tests_to_skip << tests
+        else
+          @tests_to_skip.merge!(tests)
+        end
       end
 
       def run(test_files = [])
@@ -97,7 +106,13 @@ module Elasticsearch
                      else
                        "#{@path}/#{test_files}/*.yml"
                      end
-        Dir.glob(tests_path)
+        tests = Dir.glob(tests_path)
+        tests.each do |test|
+          @tests_to_skip.each do |skip|
+            tests.delete(test) if test.match?(skip)
+          end
+        end
+        tests
       end
 
       def extract_requires!(yaml)
