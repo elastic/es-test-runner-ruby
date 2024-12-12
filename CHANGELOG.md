@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.11.0] - 2024-12-12
+
+- Adds skipping tests.
+
 ## [0.10.1] - 2024-11-13
 
 - Creates directory for tests if it doesn't exist.
