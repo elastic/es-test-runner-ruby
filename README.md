@@ -59,6 +59,14 @@ runner.run('indices')
 
 This will run all the tests in [`tests/indices`](https://github.com/elastic/elasticsearch-clients-tests/tree/main/tests/indices) such as `alias.yml`, `analyze.yml`, and so on.
 
+If you want to skip any given tests, you can do it using `add_tests_to_skip` before calling `run` like this:
+
+```ruby
+runner.add_tests_to_skip(['bulk/10_basic.yml', 'get.yml'])
+```
+
+You need to pass in an Array of file or folder names, or a single test file as a String.
+
 You can **download the YAML test files** from [the clients tests project](https://github.com/elastic/elasticsearch-clients-tests) with the following code:
 
 ```ruby
