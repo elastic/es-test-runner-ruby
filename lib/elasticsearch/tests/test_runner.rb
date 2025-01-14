@@ -29,7 +29,8 @@ module Elasticsearch
 
       def initialize(client, path = nil, logger = nil)
         @client = client
-        @serverless = defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client)
+        @serverless = defined?(::ElasticsearchServerless) && client.is_a?(::ElasticsearchServerless::Client) ||
+                      ENV['TEST_SUITE'] == 'serverless'
         @path = path || File.expand_path('./tmp', __dir__)
         @logger = logger || LOGGER
         @tests_to_skip = []
