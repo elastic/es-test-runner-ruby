@@ -16,5 +16,13 @@
 # under the License.
 
 require 'bundler/gem_tasks'
+require 'elasticsearch/tests/downloader'
 task default: %i[]
-Dir.glob('lib/elasticsearch/tasks/**/*.rake').each { |f| import f }
+
+namespace :es_tests do
+  desc 'Download YAML test files'
+  task :download do |_, args|
+    tests_path = args[:path] || File.expand_path('../../tmp', __dir__)
+    Elasticsearch::Tests::Downloader::run(tests_path)
+  end
+end
