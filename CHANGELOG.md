@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.13.0] - 2025-06-05
+
+- Moves download tests file to Rakefile (namespace is unchanged).
+- Updates Elasticsearch Clients Tests repo URL.
+
 ## [0.12.0] - 2025-01-14
 
 - Check TEST_SUITE variable for `serverless`.
