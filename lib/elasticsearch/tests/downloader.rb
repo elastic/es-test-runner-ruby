@@ -24,9 +24,9 @@ module Elasticsearch
       class << self
         FILENAME = 'tests.tar.gz'.freeze
 
-        def run(path, branch = 'main')
-          delete_files(path)
-          url = "https://api.github.com/repos/elastic/elasticsearch-clients-tests/tarball/#{branch"}
+        def run(path, branch = 'main', delete: false)
+          delete_files(path) if delete
+          url = "https://api.github.com/repos/elastic/elasticsearch-clients-tests/tarball/#{branch}"
           if download_tests(url)
             puts "Successfully downloaded #{FILENAME}"
           else
