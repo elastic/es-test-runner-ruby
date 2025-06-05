@@ -26,7 +26,7 @@ module Elasticsearch
 
         def run(path, branch = 'main')
           delete_files(path)
-          url = "https://api.github.com/repos/elastic/serverless-clients-tests/tarball/#{branch}"
+          url = "https://api.github.com/repos/elastic/elasticsearch-clients-tests/tarball/#{branch"}
           if download_tests(url)
             puts "Successfully downloaded #{FILENAME}"
           else
