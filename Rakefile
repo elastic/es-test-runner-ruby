@@ -22,7 +22,7 @@ task default: %i[]
 namespace :es_tests do
   desc 'Download YAML test files'
   task :download do |_, args|
-    tests_path = args[:path] || File.expand_path('../../tmp', __dir__)
+    tests_path = args[:path] || File.expand_path('./tmp', __dir__)
     Elasticsearch::Tests::Downloader::run(tests_path)
   end
 end
