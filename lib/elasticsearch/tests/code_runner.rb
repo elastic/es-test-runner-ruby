@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Licensed to Elasticsearch B.V. under one or more contributor
 # license agreements. See the NOTICE file distributed with
 # this work for additional information regarding copyright
@@ -57,11 +59,9 @@ module Elasticsearch
         puts "Action: #{action}\nResponse: #{@response}\n\n" if ENV['DEBUG']
         @response
       rescue StandardError => e
-        if expected_exception?(catchable, e)
-          puts "Catchable: #{e}\nResponse: #{@response}\n" if ENV['DEBUG']
-        else
-          raise e
-        end
+        raise e unless expected_exception?(catchable, e)
+
+        puts "Catchable: #{e}\nResponse: #{@response}\n" if ENV['DEBUG']
       end
 
       def expected_exception?(error_type, e)
@@ -208,11 +208,11 @@ module Elasticsearch
       end
 
       def set_param_variable(params, key, param)
-        return unless param.is_a?(String) && param.include?("$")
+        return unless param.is_a?(String) && param.include?('$')
 
         # Param can be a single '$value' string or '{ something: $value }'
         repleacable = param.match(/(\$[0-9a-z_-]+)/)[0]
-        value = instance_variable_get(repleacable.gsub("$", "@"))
+        value = instance_variable_get(repleacable.gsub('$', '@'))
         content = param.gsub(repleacable, value)
         params[key] = content
       end
