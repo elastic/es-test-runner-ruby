@@ -24,18 +24,14 @@ module Elasticsearch
     # Functions to print out test results, errors, summary, etc.
     #
     module Printer
-      BOX_WIDTH = TTY::Screen.width * 0.8
+      BOX_WIDTH = TTY::Screen.width
 
       def print_success
-        response = if [true, false].include? @response
-                     @response
-                   else
-                     @response.status
-                   end
         if quiet?
           print '🟢 '
         else
-          puts "🟢 \e[#{33}m#{@short_name}\e[0m - #{@action}  \e[#{32}mpassed\e[0m [#{response}]"
+          status = boolean_response? ? @response : @response.status
+          puts "🟢 \e[33m#{@short_name}\e[0m - #{@action}  \e[32mpassed\e[0m [#{status}]"
         end
       end
 
@@ -47,7 +43,7 @@ module Elasticsearch
         if quiet?
           print '🔴 '
         else
-          puts "🔴 \e[#{33}m#{@short_name}\e[0m - #{@action}  \e[#{31}mfailed\e[0m"
+          puts "🔴 \e[33m#{@short_name}\e[0m - #{@action}  \e[31mfailed\e[0m"
         end
         message = ["Expected result: #{action}"]
         if defined?(ElasticsearchServerless) &&
@@ -112,11 +108,21 @@ module Elasticsearch
           Test File: #{$test_file}
           Action: #{method}
           Parameters: #{params}
-          Response: #{@response.status}
-          Response headers: #{@response.headers}
-          Response body: #{@response.body}
         MSG
+        if boolean_response?
+          message << "Response: #{@response}"
+        else
+          message << "Response: #{@response.status}" \
+                     "Response headers: #{@response.headers}" \
+                     "Response body: #{@response.body}"
+        end
         print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[DEBUG]'})
+      end
+
+      private
+
+      def boolean_response?
+        [true, false].include? @response
       end
     end
   end
