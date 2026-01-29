@@ -32,17 +32,24 @@ module Elasticsearch
                    else
                      @response.status
                    end
-        if ENV['QUIET'] == 'true'
+        if quiet?
           print '🟢 '
         else
           puts "🟢 \e[#{33}m#{@short_name}\e[0m - #{@action}  \e[#{32}mpassed\e[0m [#{response}]"
         end
       end
 
+      def quiet?
+        !ENV['QUIET'].nil? && ![false, 'false'].include?(ENV['QUIET'])
+      end
+
       def print_failure(action, response)
-        puts "🔴 #{@short_name} #{@title} failed"
+        if quiet?
+          print '🔴 '
+        else
+          puts "🔴 \e[#{33}m#{@short_name}\e[0m - #{@action}  \e[#{31}mfailed\e[0m"
+        end
         message = ["Expected result: #{action}"]
-        puts  # TODO: Show match/length differently
         if defined?(ElasticsearchServerless) &&
            response.is_a?(ElasticsearchServerless::API::Response) ||
            defined?(Elasticsearch::API) && response.is_a?(Elasticsearch::API::Response)
@@ -51,7 +58,6 @@ module Elasticsearch
         else
           message << response
         end
-        print TTY::Box.error(message, width: BOX_WIDTH)
         raise Elasticsearch::Tests::ActionError.new(response.body, @short_name, action)
       end
 
