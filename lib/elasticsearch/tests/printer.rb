@@ -14,6 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+require 'tty-box'
+require 'tty-screen'
 require_relative 'errors'
 
 module Elasticsearch
@@ -22,6 +24,8 @@ module Elasticsearch
     # Functions to print out test results, errors, summary, etc.
     #
     module Printer
+      BOX_WIDTH = TTY::Screen.width * 0.8
+
       def print_success
         response = if [true, false].include? @response
                      @response
@@ -37,15 +41,17 @@ module Elasticsearch
 
       def print_failure(action, response)
         puts "🔴 #{@short_name} #{@title} failed"
-        puts "Expected result: #{action}" # TODO: Show match/length differently
+        message = ["Expected result: #{action}"]
+        puts  # TODO: Show match/length differently
         if defined?(ElasticsearchServerless) &&
            response.is_a?(ElasticsearchServerless::API::Response) ||
            defined?(Elasticsearch::API) && response.is_a?(Elasticsearch::API::Response)
-          puts 'Response:'
-          pp response.body
+          message << 'Response:'
+          message << response.body
         else
-          pp response
+          message << response
         end
+        print TTY::Box.error(message, width: BOX_WIDTH)
         raise Elasticsearch::Tests::ActionError.new(response.body, @short_name, action)
       end
 
@@ -63,7 +69,7 @@ module Elasticsearch
       end
 
       def print_error(error)
-        puts "❌ ERROR: #{@short_name} #{@title} failed\n"
+        print TTY::Box.error("❌ ERROR: #{@short_name} #{@title} failed", width: BOX_WIDTH)
         logger.error error.display
         backtrace = error.backtrace.join("\n")
         logger.error "#{backtrace}\n"
@@ -71,27 +77,40 @@ module Elasticsearch
       end
 
       def self.display_errors(errors, logger)
-        puts "+++ ❌ Errors/Failures: #{errors.count}"
+        print TTY::Box.frame("❌ Errors/Failures: #{errors.count}", width: BOX_WIDTH, style: { border: { fg: :red } })
         errors.map do |error|
           message = []
           message << "🧪 Test: #{error[:file]}"
           message << "▶ Action: #{error[:action].first}" if error[:action]
           message << "🔬 #{error.class} - #{error[:error].message}"
           message << error[:error].backtrace.join("$/\n") if ENV['DEBUG']
-          puts message.join("\n")
+          print TTY::Box.frame(message.join("\n"), width: BOX_WIDTH, style: { border: { fg: :red } })
           logger.error(message.join("\n"))
         end
       end
 
       def self.display_summary(tests_count, errors_count, start_time, logger)
-        puts
         summary = "🧪 Tests: #{tests_count} | Passed: #{tests_count - errors_count} | Failed: #{errors_count}"
         logger.info summary
-        puts "--- #{summary}"
-
         duration = "⏲  Elapsed time: #{Time.at(Time.now - start_time).utc.strftime('%H:%M:%S')}"
+        message = <<~MSG
+                     #{summary}
+                     #{duration}
+        MSG
+        print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[SUMMARY]' }, style: { border: { fg: :cyan } })
         logger.info duration
-        puts "--- #{duration}"
+      end
+
+      def print_debug_message(method, params)
+        message = <<~MSG
+          Test File: #{$test_file}
+          Action: #{method}
+          Parameters: #{params}
+          Response: #{@response.status}
+          Response headers: #{@response.headers}
+          Response body: #{@response.body}
+        MSG
+        print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[DEBUG]'})
       end
     end
   end

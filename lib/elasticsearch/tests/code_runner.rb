@@ -55,8 +55,9 @@ module Elasticsearch
           client = @client.send(arrayed_method.first)
           method = arrayed_method.last
         end
-        @response = client.send(method.to_sym, process_params(params))
-        puts "Action: #{action}\nResponse: #{@response}\n\n" if ENV['DEBUG']
+        params = process_params(params)
+        @response = client.send(method.to_sym, params)
+        print_debug_message(method.to_sym, params) if ENV['DEBUG']
         @response
       rescue StandardError => e
         raise e unless expected_exception?(catchable, e)
@@ -116,13 +117,14 @@ module Elasticsearch
 
       def match_regexp(expected, result)
         expected.is_a?(String) &&
-          expected.match?(/^\//) &&
+          expected.match?(%r{^/}) &&
           result.match?(Regexp.new(expected.gsub('/', '').strip))
       end
 
       def do_length(action)
         k, v = action['length'].first
-        result = search_in_response(k).count
+        result = search_in_response(k)
+        result = result.count
         if result && result == v
           print_success
         else
