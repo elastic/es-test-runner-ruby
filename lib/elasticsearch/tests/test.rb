@@ -59,18 +59,24 @@ module Elasticsearch
 
         case definition
         when 'do'
+          @action = "#{action['do'].keys.first}"
           do_action(action['do'])
         when 'set'
           set_variable(action)
         when 'match'
+          @action = "#{action.keys.first} #{format_action(action[action.keys.first])}"
           do_match(action)
         when 'length'
+          @action = format_action(action)
           do_length(action)
         when 'is_true'
+          @action = format_action(action)
           is_true(action)
         when 'is_false'
+          @action = format_action(action)
           is_false(action)
         when 'gt', 'gte', 'lt', 'lte'
+          @action = format_action(action)
           compare(action)
         end
       rescue StandardError => e
@@ -105,6 +111,17 @@ module Elasticsearch
         yaml.map.with_index do |a, i|
           yaml.delete_at(i) if a.keys.first == 'teardown'
         end.compact.first
+      end
+
+      private
+
+      def format_action(action)
+        action.to_s
+              .gsub(/^{/, '')
+              .gsub(' =>', ':')
+              .gsub('"', '')
+              .gsub('}', '')
+              .gsub('{', '|')
       end
     end
   end
