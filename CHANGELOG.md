@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.15.0] - 2026-01-29
+
+- Bugfix: refactors response display for boolean responses (ping, exists) when in debug mode.
+- Sets boxes screen size to whole screen.
+
 ## [0.14.0] - 2026-01-29
 
 - Introduces Ruby TTY tools for better debugging when `ENV['DEBUG']` is set and general display improvements.
