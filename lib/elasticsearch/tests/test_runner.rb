@@ -64,17 +64,17 @@ module Elasticsearch
         @errors = []
 
         @test_files.map do |test_path|
-          test_file = test_filename(test_path)
+          $test_file = test_filename(test_path)
           build_and_run_tests(test_path)
         rescue Psych::SyntaxError => e
-          @errors << { error: e, file: test_file }
-          @logger.warn("YAML error in #{test_file}")
+          @errors << { error: e, file: $test_file }
+          @logger.warn("YAML error in #{$test_file}")
           @logger.warn e
         rescue ActionError => e
-          @errors << { error: e, file: test_file, action: e.action }
+          @errors << { error: e, file: $test_file, action: e.action }
           @logger.debug e
         rescue StandardError => e
-          @errors << { error: e, file: test_file }
+          @errors << { error: e, file: $test_file }
           @logger.debug e
         rescue SystemExit, Interrupt
           exit
