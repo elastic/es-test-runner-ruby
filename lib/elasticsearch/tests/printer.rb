@@ -35,7 +35,7 @@ module Elasticsearch
         if ENV['QUIET'] == 'true'
           print '🟢 '
         else
-          puts "🟢 #{@short_name} #{@title} passed. Response: #{response}"
+          puts "🟢 \e[#{33}m#{@short_name}\e[0m - #{@action}  \e[#{32}mpassed\e[0m [#{response}]"
         end
       end
 
