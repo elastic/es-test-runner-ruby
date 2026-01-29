@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.14.0] - 2026-01-29
+
+- Introduces Ruby TTY tools for better debugging when `ENV['DEBUG']` is set and general display improvements.
+- Better information for actions in passing/erroring tests, showing actions instead of the test title.
+
 ## [0.13.0] - 2025-06-05
 
 - Moves download tests file to Rakefile (namespace is unchanged).
