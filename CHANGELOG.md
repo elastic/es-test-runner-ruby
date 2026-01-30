@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.15.1] - 2026-01-30
+
+- Rescues invalid byte sequence for search_mvt test.
+
 ## [0.15.0] - 2026-01-29
 
 - Bugfix: refactors response display for boolean responses (ping, exists) when in debug mode.
