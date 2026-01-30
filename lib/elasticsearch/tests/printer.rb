@@ -104,6 +104,7 @@ module Elasticsearch
       end
 
       def print_debug_message(method, params)
+        begin
         message = <<~MSG
           Test File: #{$test_file}
           Action: #{method}
@@ -117,6 +118,12 @@ module Elasticsearch
                      "Response body: #{@response.body}"
         end
         print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[DEBUG]'})
+        rescue ArgumentError => e
+          if e.message == 'invalid byte sequence in UTF-8'
+            @response.body.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+            print_debug_message(method, params)
+          end
+        end
       end
 
       private
