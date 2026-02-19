@@ -113,8 +113,8 @@ module Elasticsearch
         if boolean_response?
           message << "Response: #{@response}"
         else
-          message << "Response: #{@response.status}" \
-                     "Response headers: #{@response.headers}" \
+          message << "Response: #{@response.status} \n" \
+                     "Response headers: #{@response.headers} \n" \
                      "Response body: #{@response.body}"
         end
         print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[DEBUG]'})
