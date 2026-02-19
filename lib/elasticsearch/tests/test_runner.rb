@@ -51,11 +51,7 @@ module Elasticsearch
         run_the_tests
         Elasticsearch::Tests::Printer::display_errors(@errors, @logger) unless @errors.empty?
         Elasticsearch::Tests::Printer::display_summary(@tests_count, @errors.count, @start_time, @logger)
-        if @errors.empty?
-          exit 0
-        else
-          exit 1
-        end
+        exit 1 unless @errors.empty?
       end
 
       def run_the_tests
