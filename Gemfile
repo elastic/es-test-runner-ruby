@@ -25,6 +25,6 @@ gemspec
 gem 'rake', '~> 13.0'
 
 group :test, :development do
-  gem 'debug'
+  gem 'debug' unless defined?(JRUBY_VERSION)
   gem 'elasticsearch'
 end

@@ -26,3 +26,8 @@ namespace :es_tests do
     Elasticsearch::Tests::Downloader::run(tests_path)
   end
 end
+
+desc 'Run unit tests'
+task :test do
+  sh 'bundle exec rspec'
+end
