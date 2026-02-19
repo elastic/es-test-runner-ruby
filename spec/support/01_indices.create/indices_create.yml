@@ -1,0 +1,9 @@
+---
+requires:
+  serverless: true
+  stack: true
+---
+"A test yaml file":
+  - do:
+      indices.create:
+        name: text
