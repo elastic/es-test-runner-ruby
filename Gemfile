@@ -17,14 +17,14 @@
 
 # frozen_string_literal: true
 
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 # Specify your gem's dependencies in elasticsearch-tests.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
+gem 'rake', '~> 13.0'
 
 group :test, :development do
-  gem 'elasticsearch'
   gem 'debug'
+  gem 'elasticsearch'
 end
