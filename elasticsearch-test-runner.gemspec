@@ -51,4 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'elasticsearch'
   spec.add_development_dependency 'elasticsearch-serverless'
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rspec-mocks'
 end
