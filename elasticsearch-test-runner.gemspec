@@ -50,4 +50,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tty-screen'
   spec.add_development_dependency 'elasticsearch'
   spec.add_development_dependency 'elasticsearch-serverless'
+  spec.add_development_dependency 'rspec'
 end
