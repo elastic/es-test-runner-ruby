@@ -105,19 +105,21 @@ module Elasticsearch
 
       def print_debug_message(method, params)
         begin
-        message = <<~MSG
-          Test File: #{$test_file}
-          Action: #{method}
-          Parameters: #{params}
-        MSG
-        if boolean_response?
-          message << "Response: #{@response}"
-        else
-          message << "Response: #{@response.status} \n" \
-                     "Response headers: #{@response.headers} \n" \
-                     "Response body: #{@response.body}"
-        end
-        print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[DEBUG]'})
+          message = [
+            "File: #{$test_file} | Action: #{method}",
+            "Parameters: #{params}",
+            ''
+          ]
+          if boolean_response?
+            message << "Response: #{@response}"
+          else
+            message << "Response status: #{@response.status}"
+            message << 'Response body:'
+            message.push(*@response.body.map { |k, v| "  #{k}: #{v}" })
+            message << 'Response headers:'
+            message.push(*@response.headers.map { |k, v| "  #{k}: #{v}" })
+          end
+          puts TTY::Box.frame(message.join("\n"), width: BOX_WIDTH, title: { top_left: '[DEBUG]' })
         rescue ArgumentError => e
           if e.message == 'invalid byte sequence in UTF-8'
             @response.body.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
