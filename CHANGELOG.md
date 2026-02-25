@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.16.0] - 2026-02-25
+
+- Lets Ruby handle successful exit code at the end of the test run, only uses `exit 1` if there are errors.
+- Display of debug messages has been improved when `DEBUG=true` is used - [Pull Request](https://github.com/elastic/es-test-runner-ruby/pull/24).
+
 ## [0.15.1] - 2026-01-30
 
 - Rescues invalid byte sequence for search_mvt test.
