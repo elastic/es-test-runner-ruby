@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.16.1] - 2026-02-26
+
+- Updates debug display message for String response bodies.
+
 ## [0.16.0] - 2026-02-25
 
 - Lets Ruby handle successful exit code at the end of the test run, only uses `exit 1` if there are errors.
