@@ -59,7 +59,7 @@ module Elasticsearch
 
         case definition
         when 'do'
-          @action = "#{action['do'].keys.first}"
+          @action = action['do'].keys.first
           do_action(action['do'])
         when 'set'
           set_variable(action)
