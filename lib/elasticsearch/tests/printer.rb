@@ -115,7 +115,11 @@ module Elasticsearch
           else
             message << "Response status: #{@response.status}"
             message << 'Response body:'
-            message.push(*@response.body.map { |k, v| "  #{k}: #{v}" })
+            if @response.body.is_a?(String)
+              message.push(@response.body.empty? ? '  ""' : @response.body)
+            elsif @response.body.is_a?(Hash)
+              message.push(*@response.body.map { |k, v| "  #{k}: #{v}" })
+            end
             message << 'Response headers:'
             message.push(*@response.headers.map { |k, v| "  #{k}: #{v}" })
           end
