@@ -36,7 +36,7 @@ You can optionally pass in an object that implements Ruby's Logger to the `TestR
 
 ```ruby
 logger = Logger.new($stdout)
-logger.level = Logger::WARN unless ENV['DEBUG']
+logger.level = Logger::WARN unless ENV['DEBUG'] == 'true'
 
 runner = Elasticsearch::Tests::TestRunner.new(client, tests_path, logger)
 runner.run

@@ -57,12 +57,12 @@ module Elasticsearch
         end
         params = process_params(params)
         @response = client.send(method.to_sym, params)
-        print_debug_message(method.to_sym, params) if ENV['DEBUG']
+        print_debug_message(method.to_sym, params) if debug?
         @response
       rescue StandardError => e
         raise e unless expected_exception?(catchable, e)
 
-        puts "Catchable: #{e}\nResponse: #{@response}\n" if ENV['DEBUG']
+        puts "Catchable: #{e}\nResponse: #{@response}\n" if debug?
       end
 
       def expected_exception?(error_type, e)
@@ -182,6 +182,10 @@ module Elasticsearch
       end
 
       private
+
+      def debug?
+        ENV['DEBUG'] == 'true'
+      end
 
       # Given a key coming from a test definition, search the response body for a matching value.
       #

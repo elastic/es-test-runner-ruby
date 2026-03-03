@@ -85,7 +85,7 @@ module Elasticsearch
           message << "🧪 Test: #{error[:file]}"
           message << "▶ Action: #{error[:action].first}" if error[:action]
           message << "🔬 #{error.class} - #{error[:error].message}"
-          message << error[:error].backtrace.join("$/\n") if ENV['DEBUG']
+          message << error[:error].backtrace.join("$/\n") if ENV['DEBUG'] == 'true'
           print TTY::Box.frame(message.join("\n"), width: BOX_WIDTH, style: { border: { fg: :red } })
           logger.error(message.join("\n"))
         end
