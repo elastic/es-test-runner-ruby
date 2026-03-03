@@ -25,7 +25,7 @@ module Elasticsearch
     # Main YAML test runner
     class TestRunner
       LOGGER = Logger.new($stdout)
-      LOGGER.level = ENV['DEBUG'] ? Logger::DEBUG : Logger::WARN
+      LOGGER.level = ENV['DEBUG'] == 'true' ? Logger::DEBUG : Logger::WARN
 
       def initialize(client, path = nil, logger = nil)
         @client = client
