@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.17.0] - 2026-03-04
+
+- Better debugging detection, check for `ENV['DEBUG']` to be equal to `true`, not just if it's set.
+
 ## [0.16.1] - 2026-02-26
 
 - Updates debug display message for String response bodies.
