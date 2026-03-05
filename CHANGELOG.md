@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.18.0] - 2026-03-05
+
+- Lots of improvements when displaying errors. Fixes missing exceptions during particular failures. The display for errors and failures is now more detailed and comfortable to read.
+- Fixes printing a success when there's no response object, for instance when catching an expected exception.
+- The code for catching exceptions was refactored and made more reliable, including showing better information as previously mentioned.
+
 ## [0.17.0] - 2026-03-04
 
 - Better debugging detection, check for `ENV['DEBUG']` to be equal to `true`, not just if it's set.
