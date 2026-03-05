@@ -120,6 +120,8 @@ module Elasticsearch
           print_success
         else
           print_match_failure(action)
+          message = "Match failure\nExpected #{k}: #{v}.\nResult: #{result}"
+          raise ActionError.new(message, $test_file, action)
         end
       end
 
@@ -137,6 +139,8 @@ module Elasticsearch
           print_success
         else
           print_failure(action, @response)
+          message = "do_length failure\nExpected #{k}: #{v}.\nResult: #{result}"
+          raise ActionError.new(message, $test_file, action)
         end
       end
 
@@ -155,6 +159,8 @@ module Elasticsearch
           print_success
         else
           print_failure(action, @response)
+          message = "is_true failure\nResponse: #{response_value || @response}."
+          raise ActionError.new(message, $test_file, action)
         end
       end
 
@@ -164,6 +170,8 @@ module Elasticsearch
           print_success
         else
           print_failure(action, @response)
+          message = "is_false failure\nResponse: #{response_value || @response}."
+          raise ActionError.new(message, $test_file, action)
         end
       end
 
@@ -174,11 +182,14 @@ module Elasticsearch
       #
       def compare(action)
         operator, value = action.first
+
         result = search_in_response(value.keys.first)
         if result&.send(COMPARATORS[operator], value[value.keys.first])
           print_success
         else
           print_failure(action, @response)
+          message = "comparision failure\n#{result} #{COMPARATORS[operator]} #{value[value.keys.first]}"
+          raise ActionError.new(message, $test_file, action)
         end
       end
 

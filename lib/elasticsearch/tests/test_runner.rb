@@ -86,8 +86,6 @@ module Elasticsearch
         test = Elasticsearch::Tests::Test.new(yaml, test_path, @client)
         test.execute
         @tests_count += test.count
-      rescue StandardError => e
-        raise e
       end
 
       def test_filename(file)
