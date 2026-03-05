@@ -62,8 +62,13 @@ module Elasticsearch
         keys = action['match'].keys.first
         value = action['match'].values.first
 
+        if quiet?
+          print '🔴 '
+        else
+          puts "🔴 \e[33m#{@short_name} (match)\e[0m - \e[32;9m#{keys}: #{value}\e[0m  \e[95m#{keys}: #{search_in_response(action['match'].keys.first)}\e[0m \e[31mfailed\e[0m"
+        end
         message = <<~MSG
-          🔴 #{@short_name} #{@title} failed
+          #{@short_name} #{@title} failed
           Expected: { #{keys}: #{value} }
           Actual  : { #{keys}: #{search_in_response(action['match'].keys.first)} }
           Response: #{@response}
