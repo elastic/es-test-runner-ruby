@@ -132,6 +132,14 @@ module Elasticsearch
         end
       end
 
+      def print_debug_catchable(exception)
+        puts TTY::Box.frame(
+               "Catchable: #{exception}\nResponse: #{@response}\n",
+               width: BOX_WIDTH,
+               title: { top_left: '[DEBUG]' }
+             )
+      end
+
       private
 
       def boolean_response?

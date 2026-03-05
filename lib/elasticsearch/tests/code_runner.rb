@@ -60,11 +60,19 @@ module Elasticsearch
         print_debug_message(method.to_sym, params) if debug?
         @response
       rescue StandardError => e
-        raise e unless expected_exception?(catchable, e)
-
-        puts "Catchable: #{e}\nResponse: #{@response}\n" if debug?
+        # Raise if it's an actual error:
+        unless expected_exception?(catchable, e)
+          print_failure(action, @response)
+          raise e
+        end
+        # Show success if we caught an expected exception:
+        print_success
+        print_debug_catchable(e) if debug?
       end
 
+      # The keyword `catch` is used in the yaml tests to catch exceptions. This code looks at the
+      # expected error and the response error to compare them and check that we got the expected
+      # exception.
       def expected_exception?(error_type, e)
         return false if error_type.nil?
 
@@ -86,14 +94,14 @@ module Elasticsearch
         when 'forbidden'
           e.is_a?(Elastic::Transport::Transport::Errors::Forbidden)
         when /error parsing field/, /illegal_argument_exception/
-          e.message =~ /\[400\]/ ||
+          e.message.match?(/\[400\]/) ||
             e.is_a?(Elastic::Transport::Transport::Errors::BadRequest)
         when /NullPointerException/
-          e.message =~ /\[400\]/
+          e.message.match?(/\[400\]/)
         when /status_exception/
-          e.message =~ /\[409\]/
+          e.message.match?(/\[409\]/)
         else
-          e.message =~ /#{error_type}/
+          e.message.match?(/#{error_type}/)
         end
       end
 
