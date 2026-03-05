@@ -85,14 +85,16 @@ module Elasticsearch
       end
 
       def self.display_errors(errors, logger)
+        puts
         print TTY::Box.frame("❌ Errors/Failures: #{errors.count}", width: BOX_WIDTH, style: { border: { fg: :red } })
-        errors.map do |error|
+
+        errors.each do |error|
+          print TTY::Box.frame("🧪 Test: #{error[:file]}", width: BOX_WIDTH * 0.6, style: { border: { fg: :red } })
           message = []
-          message << "🧪 Test: #{error[:file]}"
           message << "▶ Action: #{error[:action].first}" if error[:action]
-          message << "🔬 #{error.class} - #{error[:error].message}"
+          message << "🔬 #{error[:error].class} - #{error[:error].message}"
           message << error[:error].backtrace.join("$/\n") if ENV['DEBUG'] == 'true'
-          print TTY::Box.frame(message.join("\n"), width: BOX_WIDTH, style: { border: { fg: :red } })
+          puts message.join("\n")
           logger.error(message.join("\n"))
         end
       end
@@ -105,6 +107,7 @@ module Elasticsearch
                      #{summary}
                      #{duration}
         MSG
+        puts
         print TTY::Box.frame(message, width: BOX_WIDTH, title: { top_left: '[SUMMARY]' }, style: { border: { fg: :cyan } })
         logger.info duration
       end
