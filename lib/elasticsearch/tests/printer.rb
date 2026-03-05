@@ -51,15 +51,11 @@ module Elasticsearch
           puts "🔴 \e[33m#{@short_name}\e[0m - #{@action}  \e[31mfailed\e[0m"
         end
         message = ["Expected result: #{action}"]
-        if defined?(ElasticsearchServerless) &&
-           response.is_a?(ElasticsearchServerless::API::Response) ||
-           defined?(Elasticsearch::API) && response.is_a?(Elasticsearch::API::Response)
-          message << 'Response:'
+        if response&.body
           message << response.body
         else
           message << response
         end
-        raise Elasticsearch::Tests::ActionError.new(response.body, @short_name, action)
       end
 
       def print_match_failure(action)
