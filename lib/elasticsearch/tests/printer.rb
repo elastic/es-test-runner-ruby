@@ -30,8 +30,13 @@ module Elasticsearch
         if quiet?
           print '🟢 '
         else
-          status = boolean_response? ? @response : @response.status
-          puts "🟢 \e[33m#{@short_name}\e[0m - #{@action}  \e[32mpassed\e[0m [#{status}]"
+          msg = "🟢 \e[33m#{@short_name}\e[0m - #{@action} \e[32mpassed\e[0m"
+          if @response.nil?
+            puts msg
+          else
+            status = boolean_response? ? @response : @response.status
+            puts "#{msg} [#{status}]"
+          end
         end
       end
 
