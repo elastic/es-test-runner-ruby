@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.18.1] - 2026-03-06
+
+- Fixes skipping tests.
+
 ## [0.18.0] - 2026-03-05
 
 - Lots of improvements when displaying errors. Fixes missing exceptions during particular failures. The display for errors and failures is now more detailed and comfortable to read.
