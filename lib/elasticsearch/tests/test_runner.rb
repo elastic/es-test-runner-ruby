@@ -40,7 +40,7 @@ module Elasticsearch
         if tests.is_a? String
           @tests_to_skip << tests
         else
-          @tests_to_skip.merge!(tests)
+          @tests_to_skip += tests
         end
       end
 
