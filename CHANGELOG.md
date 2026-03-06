@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.18.2] - 2026-03-06
+
+- Fixes skipping multiple tests.
+- Fixes running tests in a directory.
+
 ## [0.18.1] - 2026-03-06
 
 - Fixes skipping tests.
