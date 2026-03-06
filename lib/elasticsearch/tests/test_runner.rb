@@ -102,11 +102,12 @@ module Elasticsearch
                        "#{@path}/tests/#{test_files}/*.yml"
                      end
         tests = Dir.glob(tests_path)
-        tests.each do |test|
-          @tests_to_skip.each do |skip|
-            tests.delete(test) if test.match?(skip)
-          end
+        # Find the full paths of tests to be skipped and delete them from the tests to run:
+        full_paths = @tests_to_skip.map do |skip|
+          tests.find { |t| t.match?(skip) }
         end
+        full_paths.each { |a| tests.delete(a) }
+
         tests
       end
 
