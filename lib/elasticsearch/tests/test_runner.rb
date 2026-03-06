@@ -99,7 +99,7 @@ module Elasticsearch
                      elsif test_files.include?('yml')
                        return ["#{@path}/tests/#{test_files}"]
                      else
-                       "#{@path}/#{test_files}/*.yml"
+                       "#{@path}/tests/#{test_files}/*.yml"
                      end
         tests = Dir.glob(tests_path)
         tests.each do |test|
