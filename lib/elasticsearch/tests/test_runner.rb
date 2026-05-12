@@ -79,7 +79,11 @@ module Elasticsearch
 
       def build_and_run_tests(test_path)
         yaml = YAML.load_stream(File.read(test_path))
-        requires = extract_requires!(yaml).compact.first['requires']
+        begin
+          requires = extract_requires!(yaml).compact.first['requires']
+        rescue StandardError => e
+          raise ArgumentError, "Could not find requires key in test file:\n #{test_path}\n#{e}"
+        end
         return unless (requires['serverless'] == true && @serverless) ||
                       (requires['stack'] == true && !@serverless)
 
