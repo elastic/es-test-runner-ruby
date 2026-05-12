@@ -70,9 +70,9 @@ module Elasticsearch
         end
         message = <<~MSG
           #{@short_name} #{@title} failed
-          Expected: { #{keys}: #{value} }
-          Actual  : { #{keys}: #{search_in_response(action['match'].keys.first)} }
-          Response: #{@response}
+          \e[31m\e[1mExpected: { #{keys}: #{value} }\e[0m
+          \e[32m\e[1mGot     : { #{keys}: #{search_in_response(action['match'].keys.first)} }\e[0m
+          \e[1mResponse\e[0m:\n\e[36m #{@response}\e[0m
         MSG
         raise Elasticsearch::Tests::TestFailure.new(message)
       end
