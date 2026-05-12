@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.19.0] - 2026-05-12
+
+- Adds exception to print_failure if there is one.
+- Better formatting when printing match failures.
+- Raise error if the requires section is missing from a test.
+
 ## [0.18.2] - 2026-03-06
 
 - Fixes skipping multiple tests.
