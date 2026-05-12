@@ -62,7 +62,7 @@ module Elasticsearch
       rescue StandardError => e
         # Raise if it's an actual error:
         unless expected_exception?(catchable, e)
-          print_failure(action, @response)
+          print_failure(action, @response, e)
           raise e
         end
         # Show success if we caught an expected exception:

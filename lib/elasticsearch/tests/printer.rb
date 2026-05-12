@@ -44,7 +44,7 @@ module Elasticsearch
         !ENV['QUIET'].nil? && ![false, 'false'].include?(ENV['QUIET'])
       end
 
-      def print_failure(action, response)
+      def print_failure(action, response, exception = nil)
         if quiet?
           print '🔴 '
         else
@@ -56,6 +56,7 @@ module Elasticsearch
         else
           message << response
         end
+        message << "Exception: #{exception}" if exception
       end
 
       def print_match_failure(action)
