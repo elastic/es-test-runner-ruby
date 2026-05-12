@@ -85,6 +85,40 @@ Elasticsearch::Tests::Downloader::run(tests_path)
 
 Additionally, you can run the rake task `rake es_tests:download` included in `lib/elasticsearch/tasks`.
 
+### Environment variables
+
+You can set the following environment variables when using the test runner:
+
+#### `DEBUG`
+
+If you set `DEBUG` to `true`, you'll see debug messages for each tests, including the response status, body and headers sent from Elasticsearch:
+
+```
+🟢 cluster/put_settings.yml - is_true: acknowledged passed [200]
+┌[DEBUG]──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│File: cluster/remote_info.yml | Action: remote_info                                                                              │
+│Parameters: {}                                                                                                                   │
+│                                                                                                                                 │
+│Response status: 200                                                                                                             │
+│Response body:                                                                                                                   │
+│Response headers:                                                                                                                │
+│  x-elastic-product: Elasticsearch                                                                                               │
+│  content-type: application/vnd.elasticsearch+json;compatible-with=9                                                             │
+│  content-length: 2                                                                                                              │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### `QUIET`
+
+If you set `QUIET` to anything other than `false` or the String `"false"`, tests will run in quiet mode, where you'll only see the green (success) and/or red (failure) output for the tests:
+
+```
+$ QUIET=1 be rake test:yaml
+🟢 🟢 🟢 🟢 🟢 🔴 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢
+ ```
+
+It will still print out the summary and information about failures and/or errors at the bottom.
+
 ## Development
 
 See [CONTRIBUTING](./CONTRIBUTING.md).
