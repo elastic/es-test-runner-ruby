@@ -109,7 +109,16 @@ module Elasticsearch
       #
       def do_match(action)
         k, v = action['match'].first
-        v = instance_variable_get(v.gsub('$', '@')) if v.is_a?(String) && v.include?('$')
+
+        v = if v.is_a?(String) && v.include?('$')
+              instance_variable_get(v.gsub('$', '@'))
+            elsif v.is_a?(Array)
+              v.map do |a|
+                a.is_a?(String) && a.start_with?('$') ? instance_variable_get(a.gsub('$', '@')) : a
+              end
+            else
+              v
+            end
         result = search_in_response(k)
 
         if !result.nil? && (
@@ -236,9 +245,9 @@ module Elasticsearch
         return unless param.is_a?(String) && param.include?('$')
 
         # Param can be a single '$value' string or '{ something: $value }'
-        repleacable = param.match(/(\$[0-9a-z_-]+)/)[0]
-        value = instance_variable_get(repleacable.gsub('$', '@'))
-        content = param.gsub(repleacable, value)
+        replaceable = param.match(/(\$[0-9a-z_-]+)/)[0]
+        value = instance_variable_get(replaceable.gsub('$', '@'))
+        content = param.gsub(replaceable, value)
         params[key] = content
       end
 
