@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.20.0] - 2026-05-20
+
+- Replaces variables in arrays, update for the latest tests update.
+
 ## [0.19.0] - 2026-05-12
 
 - Adds exception to print_failure if there is one.
